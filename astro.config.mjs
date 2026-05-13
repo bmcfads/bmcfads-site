@@ -4,32 +4,59 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 
-// https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
-	integrations: [mdx(), sitemap()],
-	fonts: [
-		{
-			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
-			fallbacks: ['sans-serif'],
-			options: {
-				variants: [
-					{
-						src: ['./src/assets/fonts/atkinson-regular.woff2'],
-						weight: 400,
-						style: 'normal',
-						display: 'swap',
-					},
-					{
-						src: ['./src/assets/fonts/atkinson-bold.woff2'],
-						weight: 700,
-						style: 'normal',
-						display: 'swap',
-					},
-				],
+  site: 'https://bmcfads.ca',
+  integrations: [mdx(), sitemap()],
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: 'Atkinson',
+      cssVariable: '--font-atkinson',
+      fallbacks: ['sans-serif'],
+      options: {
+        variants: [
+          {
+            src: ['./src/assets/fonts/atkinson-regular.woff2'],
+            weight: 400,
+            style: 'normal',
+            display: 'swap',
+          },
+          {
+            src: ['./src/assets/fonts/atkinson-italic.woff2'],
+            weight: 400,
+            style: 'italic',
+            display: 'swap',
+          },
+          {
+            src: ['./src/assets/fonts/atkinson-bold.woff2'],
+            weight: 700,
+            style: 'normal',
+            display: 'swap',
+          },
+		  {
+			src: ['./src/assets/fonts/atkinson-bolditalic.woff2'],
+			weight: 700,
+			style: 'italic',
+			display: 'swap',
 			},
-		},
-	],
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: 'Barlow',
+      cssVariable: '--font-barlow',
+      fallbacks: ['sans-serif'],
+      options: {
+        variants: [
+          {
+            src: ['./src/assets/fonts/barlow-extrabold.woff2'],
+            weight: 800,
+            style: 'normal',
+            display: 'swap',
+          },
+        ],
+      },
+    },
+  ],
 });
