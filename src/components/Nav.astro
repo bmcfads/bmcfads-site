@@ -1,0 +1,27 @@
+---
+import NavLink from './NavLink.astro';
+---
+
+<nav class="nav">
+  <NavLink href="/blog">Blog</NavLink>
+  <span class="pipe">|</span>
+  <NavLink href="/portfolio">Portfolio</NavLink>
+  <span class="pipe">|</span>
+  <NavLink href="/about">About</NavLink>
+</nav>
+
+<style>
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pipe {
+    color: var(--fg);
+    opacity: 0.3;
+    font-family: var(--font-barlow), sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+</style>
