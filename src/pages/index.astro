@@ -1,8 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import BaseHead from '../components/BaseHead.astro';
+import Nav from '../components/Nav.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import logo from '../assets/brand/bmcfads-logo-white.svg';
-import { Image } from 'astro:assets';
 ---
 
 <!doctype html>
@@ -30,13 +31,7 @@ import { Image } from 'astro:assets';
         alt="BMCFADS"
         class="logo"
       />
-      <nav class="home-nav">
-        <a href="/blog">Blog</a>
-        <span class="pipe">|</span>
-        <a href="/portfolio">Portfolio</a>
-        <span class="pipe">|</span>
-        <a href="/about">About</a>
-      </nav>
+      <Nav />
     </main>
 
   </body>
@@ -88,30 +83,6 @@ import { Image } from 'astro:assets';
   .logo {
     width: 75%;
     height: auto;
-  }
-
-  .home-nav {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-family: var(--font-barlow), sans-serif;
-    font-weight: 800;
-    font-size: 1rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .home-nav a {
-    color: var(--fg);
-    text-decoration: none;
-    padding-bottom: 2px;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .home-nav a:hover {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
   }
 
   .pipe {
