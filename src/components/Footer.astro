@@ -1,8 +1,10 @@
 ---
+import TerminalPrompt from './TerminalPrompt.astro';
 import { SITE_DESCRIPTION } from '../consts';
 ---
 
 <footer>
+  <TerminalPrompt />
   <p class="description">{SITE_DESCRIPTION}</p>
   <p class="copyright">&copy; {new Date().getFullYear()} Brian McFadden. All rights reserved.</p>
   <div class="social-links">
