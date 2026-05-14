@@ -33,12 +33,12 @@ export default defineConfig({
             style: 'normal',
             display: 'swap',
           },
-		  {
-			src: ['./src/assets/fonts/atkinson-bolditalic.woff2'],
-			weight: 700,
-			style: 'italic',
-			display: 'swap',
-			},
+          {
+            src: ['./src/assets/fonts/atkinson-bolditalic.woff2'],
+            weight: 700,
+            style: 'italic',
+            display: 'swap',
+          },
         ],
       },
     },
