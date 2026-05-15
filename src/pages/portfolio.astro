@@ -279,6 +279,10 @@ import { SITE_TITLE } from '../consts';
     color: var(--fg);
   }
 
+  .item-list a:hover .item-title {
+    color: var(--accent);
+  }
+
   .item-title {
     font-family: var(--font-barlow), sans-serif;
     font-weight: 800;
@@ -286,6 +290,7 @@ import { SITE_TITLE } from '../consts';
     color: var(--fg);
     width: 25%;
     flex-shrink: 0;
+    transition: color 0.15s;
   }
 
   .item-desc {
@@ -294,16 +299,10 @@ import { SITE_TITLE } from '../consts';
     flex: 1;
   }
 
-  .arrow {
+  .item-list :global(.arrow) {
     width: 14px;
     height: 14px;
     flex-shrink: 0;
-    opacity: 0.4;
-    color: var(--fg);
-  }
-
-  .item-list a:hover :global(.arrow) {
-    opacity: 1;
-    color: var(--accent);
+    color: var(--fg-muted);
   }
 </style>
