@@ -1,20 +1,321 @@
 ---
+import ArrowIcon from '../components/ArrowIcon.astro';
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
 <html lang="en">
   <head>
-    <BaseHead title={`Portfolio | ${SITE_TITLE}`} description="Projects and work by Brian McFadden." />
+    <BaseHead title={`Portfolio | ${SITE_TITLE}`} description="Repos, docs, blogs, videos, live, community." />
   </head>
   <body>
     <Header />
     <main>
-      <h1>Portfolio</h1>
-      <p>Coming soon!</p>
+      
+      <nav class="section-nav">
+        <a href="#repos">Repos</a>
+        <span class="pipe">|</span>
+        <a href="#docs">Docs</a>
+        <span class="pipe">|</span>
+        <a href="#blogs">Blogs</a>
+        <span class="pipe">|</span>
+        <a href="#videos">Videos</a>
+        <span class="pipe">|</span>
+        <a href="#live">Live</a>
+        <span class="pipe">|</span>
+        <a href="#community">Community</a>
+      </nav>
+
+      <p class="page-intro">Examples of my work. Not exhaustive, just representative.</p>
+
+      <section id="repos">
+        <div class="section-header">
+          <h2>Repos</h2>
+          <p><span class="comment-prefix">//</span>code i've built, shipped, or contributed to</p>
+        </div>
+        <ul class="item-list">
+          <li>
+            <a href="https://github.com/bmcfads/mfren" target="_blank" rel="noopener noreferrer">
+              <span class="item-title"><code>mfren</code></span>
+              <span class="item-desc">A CLI tool for renaming media files. Written in Go.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/bmcfads/bmcfads-site" target="_blank" rel="noopener noreferrer">
+              <span class="item-title"><code>bmcfads-site</code></span>
+              <span class="item-desc">This website! Based on Astro.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <hr />
+
+      <section id="docs">
+        <div class="section-header">
+          <h2>Docs</h2>
+          <p><span class="comment-prefix">//</span>documentation i've written and maintained</p>
+        </div>
+        <ul class="item-list">
+          <li>
+            <a href="https://docs.edgeimpulse.com" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">Edge Impulse Documentation</span>
+              <span class="item-desc">Example of docs organization. (I owned the migration from GitBook to Mintlify and overhauled the structure.)</span>
+              <ArrowIcon />
+            </a>
+          </li>
+          <li>
+            <a href="https://docs.edgeimpulse.com/studio/organizations/custom-blocks" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">Custom Blocks</span>
+              <span class="item-desc">Example of a single docs page. (I wrote the custom blocks overview and the six block specific pages.)</span>
+              <ArrowIcon />
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <hr />
+
+      <section id="blogs">
+        <div class="section-header">
+          <h2>Blogs</h2>
+          <p><span class="comment-prefix">//</span>writing published elsewhere</p>
+        </div>
+        <ul class="item-list">
+          <li>
+            <a href="https://edgeimpulse.com/blog/yolo-pro-now-generally-available-confidence-through-benchmarking/" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">YOLO-Pro Benchmarking</span>
+              <span class="item-desc">YOLO-Pro general availability launch post and detailed benchmarking breakdown.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+          <li>
+            <a href="#" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">1D Convolutional Autoencoder</span>
+              <span class="item-desc">[coming soon] Comparison of k-means, GMM, and autoencoder approaches for anomaly detection.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.edgeimpulse.com/blog/new-in-studio-training-graphs-yes-finally-and-tensorboard-integration/" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">Training Graphs + TensorBoard</span>
+              <span class="item-desc">Feature announcement for the Edge Impulse training graphs and TensorBoard integration.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <hr />
+
+      <section id="videos">
+        <div class="section-header">
+          <h2>Videos</h2>
+          <p><span class="comment-prefix">//</span>tutorials, deep dives, and community conversations</p>
+        </div>
+        <ul class="item-list">
+          <li>
+            <a href="https://www.youtube.com/watch?v=7gjrnYROnIQ" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">Building AI:IRL 2</span>
+              <span class="item-desc">A conversation with an Edge Impulse developer about his award winning hackathon project.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/watch?v=i-wcqCcz8Zk" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">What is an Impulse?</span>
+              <span class="item-desc">A quick hit video from the Edge Impulse Explained series.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/shorts/0kpuEKSlr68" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">Peak Challenge Trail Race</span>
+              <span class="item-desc">A Short documenting me running the Peak Challenge trail race.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <hr />
+
+      <section id="live">
+        <div class="section-header">
+          <h2>Live</h2>
+          <p><span class="comment-prefix">//</span>streams, talks, and appearances</p>
+        </div>
+        <ul class="item-list">
+          <li>
+            <a href="https://edgeimpulse.com/imagine-innovators-europe" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">Imagine Innovators Livestream</span>
+              <span class="item-desc">[coming soon] Co-hosted the livestream of Edge Impulse's Imagine Innovators, the edge AI conference for developers.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <hr />
+
+      <section id="community">
+        <div class="section-header">
+          <h2>Community</h2>
+          <p><span class="comment-prefix">//</span>discord, forum, and more</p>
+        </div>
+        <ul class="item-list">
+          <li>
+            <a href="https://discord.gg/edgeimpulse" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">Edge Impulse Discord</span>
+              <span class="item-desc">The Edge Impulse Developers Discord server. (I created the server and defined the channels, roles, permissions, etc.)</span>
+              <ArrowIcon />
+            </a>
+          </li>
+          <li>
+            <a href="https://forum.edgeimpulse.com/u/brianmcfadden/summary" target="_blank" rel="noopener noreferrer">
+              <span class="item-title">Edge Impulse Forum</span>
+              <span class="item-desc">My Edge Impulse Forum profile.</span>
+              <ArrowIcon />
+            </a>
+          </li>
+        </ul>
+      </section>
+
     </main>
     <Footer />
   </body>
 </html>
+
+<style>
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+
+  .section-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-barlow), sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+
+  .section-nav a {
+    color: var(--fg);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .section-nav a:hover {
+    color: var(--accent);
+  }
+
+  .section-nav .pipe {
+    color: var(--fg-muted);
+    opacity: 0.3;
+  }
+
+  .page-intro {
+    font-size: 1.25rem;
+    color: var(--fg-muted);
+    margin: 0 0 2rem;
+  }
+
+  section {
+    margin-bottom: 1rem;
+    scroll-margin-top: 80px;
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header h2 {
+    margin: 0 0 0.25rem;
+  }
+
+  .section-header p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+  }
+
+  .comment-prefix {
+    color: var(--accent);
+    font-family: monospace;
+    margin-right: 0.35rem;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+  }
+
+  .item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .item-list li {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .item-list li:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .item-list a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 0.5rem;
+    color: var(--fg);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .item-list a:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--fg);
+  }
+
+  .item-title {
+    font-family: var(--font-barlow), sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--fg);
+    width: 25%;
+    flex-shrink: 0;
+  }
+
+  .item-desc {
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+    flex: 1;
+  }
+
+  .arrow {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    opacity: 0.4;
+    color: var(--fg);
+  }
+
+  .item-list a:hover :global(.arrow) {
+    opacity: 1;
+    color: var(--accent);
+  }
+</style>
