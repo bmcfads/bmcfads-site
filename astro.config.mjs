@@ -58,5 +58,27 @@ export default defineConfig({
         ],
       },
     },
+    {
+      provider: fontProviders.local(),
+      name: 'JetBrains Mono',
+      cssVariable: '--font-jetbrains',
+      fallbacks: ['monospace'],
+      options: {
+        variants: [
+          {
+            src: ['./src/assets/fonts/jetbrains-mono-regular.woff2'],
+            weight: 400,
+            style: 'normal',
+            display: 'swap',
+          },
+          {
+            src: ['./src/assets/fonts/jetbrains-mono-italic.woff2'],
+            weight: 400,
+            style: 'italic',
+            display: 'swap',
+          },
+        ],
+      },
+    },
   ],
 });
