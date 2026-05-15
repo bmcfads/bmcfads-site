@@ -5,8 +5,6 @@
   --border: rgba(255, 255, 255, 0.08);
   --fg: #ffffff;
   --fg-muted: #999999;
-  --font-body: var(--font-atkinson);
-  --font-heading: var(--font-barlow);
 }
 
 *,
@@ -16,7 +14,7 @@
 }
 
 body {
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-atkinson), sans-serif;
   margin: 0;
   padding: 0;
   background: var(--bg);
@@ -30,7 +28,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), sans-serif;
+  font-family: var(--font-barlow), sans-serif;
   font-weight: 800;
   line-height: 1.2;
   margin: 0 0 0.5rem 0;
@@ -72,6 +70,7 @@ img {
 }
 
 code {
+  font-family: var(--font-jetbrains), monospace;
   font-size: 0.875em;
   padding: 2px 5px;
   background-color: rgba(255, 255, 255, 0.08);
@@ -83,18 +82,24 @@ pre {
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
   overflow-x: auto;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.875em;
 }
 
 pre > code {
-  all: unset;
+  font-size: 1em;
+  background: none;
+  padding: 0;
+  border-radius: 0;
 }
 
 blockquote {
   border-left: 4px solid var(--accent);
   padding: 0 0 0 20px;
-  margin: 0;
-  font-size: 1.333em;
+  margin: 0 0 1em;
+  font-size: 1rem;
   color: var(--fg-muted);
+  font-style: italic;
 }
 
 hr {
