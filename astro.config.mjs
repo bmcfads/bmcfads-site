@@ -50,6 +50,12 @@ export default defineConfig({
       options: {
         variants: [
           {
+            src: ['./src/assets/fonts/barlow-semibold.woff2'],
+            weight: 600,
+            style: 'normal',
+            display: 'swap',
+          },
+          {
             src: ['./src/assets/fonts/barlow-extrabold.woff2'],
             weight: 800,
             style: 'normal',
