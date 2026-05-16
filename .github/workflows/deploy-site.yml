@@ -1,6 +1,6 @@
 # This workflow will:
 # - Build the Astro site
-# - Deploy to GitHub pages
+# - Deploy to GitHub Pages
 
 name: Site Deployment
 
@@ -30,6 +30,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy site to GitHub pages
+      - name: Deploy site to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
