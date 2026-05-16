@@ -1,5 +1,6 @@
 // @ts-check
 
+import rehypeExternalLinks from 'rehype-external-links';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
@@ -7,6 +8,11 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
   site: 'https://bmcfads.ca',
   integrations: [mdx(), sitemap()],
+  markdown: {
+    rehypePlugins: [
+      [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }],
+    ],
+  },
   fonts: [
     {
       provider: fontProviders.local(),
