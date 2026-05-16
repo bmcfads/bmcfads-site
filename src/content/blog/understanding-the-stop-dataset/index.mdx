@@ -1,0 +1,335 @@
+---
+title: "Understanding the STOP dataset"
+description: "Here's a breakdown of the intents and slots for the Spoken Task-Oriented semantic Parsing (STOP) dataset."
+pubDate: 2024-06-30
+tags: ["Research"]
+---
+
+import { Image } from 'astro:assets';
+import topV2Table from './images/topv2-table1.png';
+
+Released in late 2022, the [Spoken Task-Oriented semantic Parsing (STOP)](https://arxiv.org/abs/2207.10643) dataset is one of the most recent, and most complex, datasets for end-to-end spoken language understanding tasks. It contains a greater number of speakers, audio files, and audio duration than the SLURP, Snips, and Fluent Speech Commands datasets. As such, it makes sense that I leverage this dataset for my [initial research](/blog/defining-my-masters-research-topic/). 
+
+## Domains, intents, and slots
+
+The STOP dataset builds upon TOPv2, which is a dataset consisting of text only inputs with nested queries across eight domains, by collecting audio samples for each utterance.
+
+<figure>
+  <Image src={topV2Table} alt="TOPv2 Table" />
+  <figcaption>[TOPv2 Dataset Statistics](https://arxiv.org/abs/2010.03546)</figcaption>
+</figure>
+
+Although the paper introducing TOPv2 clearly describes the statistics across each domain as shown in the image above, I have been unable to find a breakdown listing the specific intents and slots found in the utterances for each domain.
+
+Since I want to understand the STOP dataset more deeply, I decided to write a script that parses the manifest files (`eval.tsv`, `test.tsv`, `train.tsv`) to pull out the unique intents and slots, in addition to showing which slots belong to which intents.  The output from the script, and the script itself, can be found below.
+
+### Manifest parsing script output
+
+#### STOP Dataset Summary
+
+```
+-------------------------------------------
+
+STOP Dataset - Domains, Intents, and Slots
+
+-------------------------------------------
+
+DOMAIN       | IN | SL |
+------------------------
+ALARM        |  8 |  9 |
+EVENT        | 11 | 17 |
+MESSAGING    | 12 | 27 |
+MUSIC        | 15 |  9 |
+NAVIGATION   | 17 | 33 |
+REMINDER     | 19 | 32 |
+TIMER        | 11 |  5 |
+WEATHER      |  7 | 11 |
+------------------------
+```
+
+#### Domain: ALARM
+
+```
+Domain: ALARM
+
+Intents (8): ['CREATE_ALARM', 'DELETE_ALARM', 'GET_ALARM', 'GET_TIME', 'SILENCE_ALARM', 'SNOOZE_ALARM', 'UNSUPPORTED_ALARM', 'UPDATE_ALARM']
+Slots   (9): ['ALARM_NAME', 'AMOUNT', 'DATE_TIME', 'DATE_TIME_RECURRING', 'DURATION', 'ORDINAL', 'PERIOD', 'RECURRING_DATE_TIME', 'TIME_ZONE']
+
+Slots by intent:
+    1. CREATE_ALARM: ['ALARM_NAME', 'AMOUNT', 'DATE_TIME', 'DATE_TIME_RECURRING', 'DURATION', 'ORDINAL', 'PERIOD', 'RECURRING_DATE_TIME']
+    2. DELETE_ALARM: ['ALARM_NAME', 'AMOUNT', 'DATE_TIME', 'DATE_TIME_RECURRING', 'DURATION', 'ORDINAL', 'PERIOD']
+    3. GET_ALARM: ['ALARM_NAME', 'AMOUNT', 'DATE_TIME', 'DATE_TIME_RECURRING', 'DURATION', 'ORDINAL', 'PERIOD']
+    4. GET_TIME: ['DATE_TIME', 'TIME_ZONE']
+    5. SILENCE_ALARM: ['ALARM_NAME', 'AMOUNT', 'DATE_TIME', 'DATE_TIME_RECURRING', 'DURATION', 'ORDINAL', 'PERIOD']
+    6. SNOOZE_ALARM: ['ALARM_NAME', 'AMOUNT', 'DATE_TIME', 'DATE_TIME_RECURRING', 'DURATION', 'ORDINAL', 'PERIOD']
+    7. UNSUPPORTED_ALARM: ['ALARM_NAME', 'AMOUNT', 'DATE_TIME', 'DATE_TIME_RECURRING', 'DURATION', 'ORDINAL', 'PERIOD']
+    8. UPDATE_ALARM: ['ALARM_NAME', 'AMOUNT', 'DATE_TIME', 'DATE_TIME_RECURRING', 'DURATION', 'ORDINAL', 'PERIOD']
+```
+
+#### Domain: EVENT
+
+```
+Domain: EVENT
+
+Intents (11): ['GET_CONTACT', 'GET_EVENT', 'GET_EVENT_ATTENDEE', 'GET_EVENT_ATTENDEE_AMOUNT', 'GET_EVENT_ORGANIZER', 'GET_LOCATION', 'GET_LOCATION_HOME', 'GET_LOCATION_SCHOOL', 'GET_LOCATION_WORK', 'NEGATION', 'UNSUPPORTED_EVENT']
+Slots   (17): ['AMOUNT', 'ATTENDEE_EVENT', 'ATTRIBUTE_EVENT', 'CATEGORY_EVENT', 'CATEGORY_LOCATION', 'CONTACT', 'CONTACT_RELATED', 'DATE_TIME', 'LOCATION', 'LOCATION_MODIFIER', 'LOCATION_USER', 'NAME_EVENT', 'ORDINAL', 'ORGANIZER_EVENT', 'POINT_ON_MAP', 'SEARCH_RADIUS', 'TYPE_RELATION']
+
+Slots by intent:
+    1. GET_CONTACT: ['CONTACT', 'CONTACT_RELATED', 'TYPE_RELATION']
+    2. GET_EVENT: ['AMOUNT', 'ATTENDEE_EVENT', 'ATTRIBUTE_EVENT', 'CATEGORY_EVENT', 'DATE_TIME', 'LOCATION', 'NAME_EVENT', 'ORDINAL', 'ORGANIZER_EVENT']
+    3. GET_EVENT_ATTENDEE: ['ATTENDEE_EVENT', 'CATEGORY_EVENT', 'DATE_TIME', 'ORGANIZER_EVENT']
+    4. GET_EVENT_ATTENDEE_AMOUNT: ['CATEGORY_EVENT', 'DATE_TIME', 'LOCATION', 'NAME_EVENT', 'ORDINAL']
+    5. GET_EVENT_ORGANIZER: ['CATEGORY_EVENT', 'DATE_TIME', 'LOCATION', 'ORGANIZER_EVENT']
+    6. GET_LOCATION: ['CATEGORY_LOCATION', 'LOCATION', 'LOCATION_MODIFIER', 'LOCATION_USER', 'POINT_ON_MAP', 'SEARCH_RADIUS']
+    7. GET_LOCATION_HOME: ['CONTACT', 'CONTACT_RELATED', 'TYPE_RELATION']
+    8. GET_LOCATION_SCHOOL: []
+    9. GET_LOCATION_WORK: ['CONTACT']
+    10. NEGATION: []
+    11. UNSUPPORTED_EVENT: []
+```
+
+#### Domain: MESSAGING
+
+```
+Domain: MESSAGING
+
+Intents (12): ['CANCEL_MESSAGE', 'GET_CONTACT', 'GET_EVENT_ATTENDEE', 'GET_EVENT_ORGANIZER', 'GET_LOCATION', 'GET_MESSAGE', 'IGNORE_MESSAGE', 'REACT_MESSAGE', 'SELECT_ITEM', 'SEND_MESSAGE', 'SEND_TEXT_MESSAGE', 'UNSUPPORTED_MESSAGING']
+Slots   (27): ['AGE', 'AMOUNT', 'BIRTHDAY', 'CATEGORY_EVENT', 'CATEGORY_LOCATION', 'CONTACT', 'CONTACT_RELATED', 'CONTENT_EMOJI', 'CONTENT_EXACT', 'DATE_TIME', 'DATE_TIME_BIRTHDAY', 'GROUP', 'LOCATION', 'LOCATION_HOME', 'MUTUAL_EMPLOYER', 'MUTUAL_LOCATION', 'MUTUAL_SCHOOL', 'ORDINAL', 'RECIPIENT', 'RESOURCE', 'SENDER', 'TAG_MESSAGE', 'TYPE_CONTACT', 'TYPE_CONTENT', 'TYPE_INFO', 'TYPE_REACTION', 'TYPE_RELATION']
+
+Slots by intent:
+    1. CANCEL_MESSAGE: ['AMOUNT', 'TYPE_CONTENT']
+    2. GET_CONTACT: ['AGE', 'AMOUNT', 'BIRTHDAY', 'CONTACT', 'CONTACT_RELATED', 'DATE_TIME', 'DATE_TIME_BIRTHDAY', 'LOCATION_HOME', 'MUTUAL_EMPLOYER', 'MUTUAL_LOCATION', 'MUTUAL_SCHOOL', 'TYPE_CONTACT', 'TYPE_INFO', 'TYPE_RELATION']
+    3. GET_EVENT_ATTENDEE: ['AMOUNT', 'CATEGORY_EVENT', 'DATE_TIME', 'LOCATION']
+    4. GET_EVENT_ORGANIZER: ['CATEGORY_EVENT']
+    5. GET_LOCATION: ['CATEGORY_LOCATION']
+    6. GET_MESSAGE: ['AMOUNT', 'CONTENT_EXACT', 'DATE_TIME', 'GROUP', 'ORDINAL', 'RECIPIENT', 'RESOURCE', 'SENDER', 'TAG_MESSAGE', 'TYPE_CONTENT']
+    7. IGNORE_MESSAGE: ['CONTENT_EXACT', 'TYPE_CONTENT']
+    8. REACT_MESSAGE: ['AMOUNT', 'CONTACT', 'CONTENT_EXACT', 'DATE_TIME', 'GROUP', 'ORDINAL', 'RECIPIENT', 'RESOURCE', 'TAG_MESSAGE', 'TYPE_CONTENT', 'TYPE_REACTION']
+    9. SELECT_ITEM: ['ORDINAL']
+    10. SEND_MESSAGE: ['AMOUNT', 'CONTACT', 'CONTENT_EMOJI', 'CONTENT_EXACT', 'DATE_TIME', 'GROUP', 'ORDINAL', 'RECIPIENT', 'RESOURCE', 'SENDER', 'TYPE_CONTENT']
+    11. SEND_TEXT_MESSAGE: ['CONTENT_EXACT', 'RECIPIENT', 'RESOURCE']
+    12. UNSUPPORTED_MESSAGING: []
+```
+
+#### Domain: Music
+
+```
+Domain: MUSIC
+
+Intents (15): ['ADD_TO_PLAYLIST_MUSIC', 'CREATE_PLAYLIST_MUSIC', 'DISLIKE_MUSIC', 'LIKE_MUSIC', 'LOOP_MUSIC', 'PAUSE_MUSIC', 'PLAY_MUSIC', 'PREVIOUS_TRACK_MUSIC', 'REMOVE_FROM_PLAYLIST_MUSIC', 'REPLAY_MUSIC', 'SET_DEFAULT_PROVIDER_MUSIC', 'SKIP_TRACK_MUSIC', 'START_SHUFFLE_MUSIC', 'STOP_MUSIC', 'UNSUPPORTED_MUSIC']
+Slots   (9): ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_RADIO_ID', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE', 'ORDINAL']
+
+Slots by intent:
+    1. ADD_TO_PLAYLIST_MUSIC: ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE', 'ORDINAL']
+    2. CREATE_PLAYLIST_MUSIC: ['MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE']
+    3. DISLIKE_MUSIC: ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TYPE', 'ORDINAL']
+    4. LIKE_MUSIC: ['MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TYPE', 'ORDINAL']
+    5. LOOP_MUSIC: ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE', 'ORDINAL']
+    6. PAUSE_MUSIC: ['MUSIC_ARTIST_NAME', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE']
+    7. PLAY_MUSIC: ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_RADIO_ID', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE', 'ORDINAL']
+    8. PREVIOUS_TRACK_MUSIC: ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_PROVIDER_NAME', 'MUSIC_TYPE', 'ORDINAL']
+    9. REMOVE_FROM_PLAYLIST_MUSIC: ['MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE']
+    10. REPLAY_MUSIC: ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_RADIO_ID', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE', 'ORDINAL']
+    11. SET_DEFAULT_PROVIDER_MUSIC: ['MUSIC_PROVIDER_NAME']
+    12. SKIP_TRACK_MUSIC: ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE', 'ORDINAL']
+    13. START_SHUFFLE_MUSIC: ['MUSIC_ALBUM_TITLE', 'MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE', 'ORDINAL']
+    14. STOP_MUSIC: ['MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TYPE', 'ORDINAL']
+    15. UNSUPPORTED_MUSIC: ['MUSIC_ARTIST_NAME', 'MUSIC_GENRE', 'MUSIC_PLAYLIST_TITLE', 'MUSIC_PROVIDER_NAME', 'MUSIC_TRACK_TITLE', 'MUSIC_TYPE']
+```
+
+#### Domain: NAVIGATION
+
+```
+Domain: NAVIGATION
+
+Intents (17): ['GET_CONTACT', 'GET_DIRECTIONS', 'GET_DISTANCE', 'GET_ESTIMATED_ARRIVAL', 'GET_ESTIMATED_DEPARTURE', 'GET_ESTIMATED_DURATION', 'GET_EVENT', 'GET_INFO_ROAD_CONDITION', 'GET_INFO_ROUTE', 'GET_INFO_TRAFFIC', 'GET_LOCATION', 'GET_LOCATION_HOME', 'GET_LOCATION_HOMETOWN', 'GET_LOCATION_SCHOOL', 'GET_LOCATION_WORK', 'UNSUPPORTED_NAVIGATION', 'UPDATE_DIRECTIONS']
+Slots   (33): ['AMOUNT', 'ATTENDEE_EVENT', 'CATEGORY_EVENT', 'CATEGORY_LOCATION', 'CONTACT', 'CONTACT_RELATED', 'DATE_TIME', 'DATE_TIME_ARRIVAL', 'DATE_TIME_DEPARTURE', 'DESTINATION', 'GROUP', 'LOCATION', 'LOCATION_CURRENT', 'LOCATION_MODIFIER', 'LOCATION_USER', 'LOCATION_WORK', 'METHOD_TRAVEL', 'NAME_EVENT', 'OBSTRUCTION_AVOID', 'ORDINAL', 'ORGANIZER_EVENT', 'PATH', 'PATH_AVOID', 'POINT_ON_MAP', 'ROAD_CONDITION', 'ROAD_CONDITION_AVOID', 'SEARCH_RADIUS', 'SOURCE', 'TYPE_RELATION', 'UNIT_DISTANCE', 'WAYPOINT', 'WAYPOINT_ADDED', 'WAYPOINT_AVOID']
+
+Slots by intent:
+    1. GET_CONTACT: ['CONTACT', 'CONTACT_RELATED', 'GROUP', 'TYPE_RELATION']
+    2. GET_DIRECTIONS: ['AMOUNT', 'DATE_TIME_ARRIVAL', 'DATE_TIME_DEPARTURE', 'DESTINATION', 'LOCATION', 'METHOD_TRAVEL', 'OBSTRUCTION_AVOID', 'PATH', 'PATH_AVOID', 'ROAD_CONDITION', 'ROAD_CONDITION_AVOID', 'SOURCE', 'WAYPOINT', 'WAYPOINT_AVOID']
+    3. GET_DISTANCE: ['AMOUNT', 'DATE_TIME_DEPARTURE', 'DESTINATION', 'METHOD_TRAVEL', 'OBSTRUCTION_AVOID', 'PATH', 'PATH_AVOID', 'SOURCE', 'UNIT_DISTANCE', 'WAYPOINT']
+    4. GET_ESTIMATED_ARRIVAL: ['DATE_TIME_ARRIVAL', 'DATE_TIME_DEPARTURE', 'DESTINATION', 'LOCATION', 'METHOD_TRAVEL', 'OBSTRUCTION_AVOID', 'PATH', 'PATH_AVOID', 'ROAD_CONDITION', 'ROAD_CONDITION_AVOID', 'SOURCE', 'WAYPOINT']
+    5. GET_ESTIMATED_DEPARTURE: ['DATE_TIME_ARRIVAL', 'DATE_TIME_DEPARTURE', 'DESTINATION', 'LOCATION', 'METHOD_TRAVEL', 'OBSTRUCTION_AVOID', 'PATH', 'PATH_AVOID', 'ROAD_CONDITION', 'SOURCE', 'WAYPOINT']
+    6. GET_ESTIMATED_DURATION: ['DATE_TIME', 'DATE_TIME_ARRIVAL', 'DATE_TIME_DEPARTURE', 'DESTINATION', 'METHOD_TRAVEL', 'OBSTRUCTION_AVOID', 'PATH', 'PATH_AVOID', 'ROAD_CONDITION', 'ROAD_CONDITION_AVOID', 'SOURCE', 'WAYPOINT', 'WAYPOINT_AVOID']
+    7. GET_EVENT: ['ATTENDEE_EVENT', 'CATEGORY_EVENT', 'DATE_TIME', 'LOCATION', 'NAME_EVENT', 'ORDINAL', 'ORGANIZER_EVENT']
+    8. GET_INFO_ROAD_CONDITION: ['DATE_TIME', 'DATE_TIME_ARRIVAL', 'DATE_TIME_DEPARTURE', 'DESTINATION', 'LOCATION', 'METHOD_TRAVEL', 'PATH', 'ROAD_CONDITION', 'SOURCE', 'WAYPOINT']
+    9. GET_INFO_ROUTE: ['DATE_TIME_DEPARTURE', 'DESTINATION', 'METHOD_TRAVEL', 'PATH', 'SOURCE', 'WAYPOINT']
+    10. GET_INFO_TRAFFIC: ['DATE_TIME', 'DESTINATION', 'LOCATION', 'METHOD_TRAVEL', 'OBSTRUCTION_AVOID', 'PATH', 'PATH_AVOID', 'ROAD_CONDITION', 'SOURCE', 'WAYPOINT', 'WAYPOINT_AVOID']
+    11. GET_LOCATION: ['CATEGORY_LOCATION', 'LOCATION', 'LOCATION_MODIFIER', 'LOCATION_USER', 'POINT_ON_MAP', 'SEARCH_RADIUS']
+    12. GET_LOCATION_HOME: ['CONTACT', 'CONTACT_RELATED', 'LOCATION', 'LOCATION_CURRENT', 'TYPE_RELATION']
+    13. GET_LOCATION_HOMETOWN: ['CONTACT']
+    14. GET_LOCATION_SCHOOL: ['CONTACT', 'CONTACT_RELATED', 'TYPE_RELATION']
+    15. GET_LOCATION_WORK: ['CONTACT', 'CONTACT_RELATED', 'LOCATION', 'LOCATION_CURRENT', 'LOCATION_WORK', 'TYPE_RELATION']
+    16. UNSUPPORTED_NAVIGATION: []
+    17. UPDATE_DIRECTIONS: ['DATE_TIME_ARRIVAL', 'DATE_TIME_DEPARTURE', 'DESTINATION', 'OBSTRUCTION_AVOID', 'PATH', 'PATH_AVOID', 'SOURCE', 'WAYPOINT_ADDED', 'WAYPOINT_AVOID']
+```
+
+#### Domain: REMINDER
+
+```
+Domain: REMINDER
+
+Intents (19): ['CREATE_REMINDER', 'DELETE_REMINDER', 'GET_BIRTHDAY', 'GET_CONTACT', 'GET_EVENT', 'GET_EVENT_ATTENDEE', 'GET_MESSAGE', 'GET_RECURRING_DATE_TIME', 'GET_REMINDER', 'GET_REMINDER_AMOUNT', 'GET_REMINDER_DATE_TIME', 'GET_REMINDER_LOCATION', 'GET_TODO', 'HELP_REMINDER', 'REPLY_MESSAGE', 'SEND_MESSAGE', 'UPDATE_REMINDER', 'UPDATE_REMINDER_DATE_TIME', 'UPDATE_REMINDER_TODO']
+Slots   (32): ['AGE', 'AMOUNT', 'ATTENDEE', 'ATTENDEE_ADDED', 'ATTENDEE_EVENT', 'ATTENDEE_REMOVED', 'CATEGORY_EVENT', 'CONTACT', 'CONTACT_RELATED', 'CONTENT_EXACT', 'DATE_TIME', 'DATE_TIME_NEW', 'FREQUENCY', 'GROUP', 'JOB', 'METHOD_RETRIEVAL_REMINDER', 'MUTUAL_EMPLOYER', 'MUTUAL_SCHOOL', 'NAME_APP', 'ORDINAL', 'ORGANIZER_EVENT', 'PERSON_REMINDED', 'PERSON_REMINDED_ADDED', 'PERSON_REMINDED_REMOVED', 'RECIPIENT', 'RECURRING_DATE_TIME', 'RECURRING_DATE_TIME_NEW', 'SENDER', 'TODO', 'TODO_NEW', 'TYPE_CONTENT', 'TYPE_RELATION']
+
+Slots by intent:
+    1. CREATE_REMINDER: ['AMOUNT', 'DATE_TIME', 'ORDINAL', 'PERSON_REMINDED', 'RECURRING_DATE_TIME', 'TODO']
+    2. DELETE_REMINDER: ['AMOUNT', 'DATE_TIME', 'ORDINAL', 'PERSON_REMINDED', 'RECURRING_DATE_TIME', 'TODO']
+    3. GET_BIRTHDAY: ['CONTACT']
+    4. GET_CONTACT: ['AGE', 'AMOUNT', 'CONTACT', 'CONTACT_RELATED', 'JOB', 'MUTUAL_EMPLOYER', 'MUTUAL_SCHOOL', 'TYPE_RELATION']
+    5. GET_EVENT: ['ATTENDEE_EVENT', 'CATEGORY_EVENT', 'DATE_TIME', 'ORDINAL', 'ORGANIZER_EVENT']
+    6. GET_EVENT_ATTENDEE: ['DATE_TIME', 'ORGANIZER_EVENT']
+    7. GET_MESSAGE: []
+    8. GET_RECURRING_DATE_TIME: ['DATE_TIME', 'FREQUENCY', 'ORDINAL']
+    9. GET_REMINDER: ['AMOUNT', 'DATE_TIME', 'METHOD_RETRIEVAL_REMINDER', 'ORDINAL', 'PERSON_REMINDED', 'RECURRING_DATE_TIME', 'TODO']
+    10. GET_REMINDER_AMOUNT: ['DATE_TIME', 'METHOD_RETRIEVAL_REMINDER', 'PERSON_REMINDED', 'TODO']
+    11. GET_REMINDER_DATE_TIME: ['AMOUNT', 'DATE_TIME', 'METHOD_RETRIEVAL_REMINDER', 'ORDINAL', 'PERSON_REMINDED', 'RECURRING_DATE_TIME', 'TODO']
+    12. GET_REMINDER_LOCATION: ['AMOUNT', 'DATE_TIME', 'METHOD_RETRIEVAL_REMINDER', 'ORDINAL', 'PERSON_REMINDED', 'TODO']
+    13. GET_TODO: ['AMOUNT', 'ATTENDEE', 'DATE_TIME', 'RECURRING_DATE_TIME', 'TODO']
+    14. HELP_REMINDER: []
+    15. REPLY_MESSAGE: ['CONTENT_EXACT', 'RECIPIENT', 'SENDER']
+    16. SEND_MESSAGE: ['AMOUNT', 'CONTACT', 'CONTENT_EXACT', 'DATE_TIME', 'GROUP', 'NAME_APP', 'RECIPIENT', 'SENDER', 'TYPE_CONTENT']
+    17. UPDATE_REMINDER: ['AMOUNT', 'ATTENDEE', 'ATTENDEE_ADDED', 'ATTENDEE_REMOVED', 'DATE_TIME', 'DATE_TIME_NEW', 'ORDINAL', 'PERSON_REMINDED', 'PERSON_REMINDED_ADDED', 'PERSON_REMINDED_REMOVED', 'RECURRING_DATE_TIME', 'RECURRING_DATE_TIME_NEW', 'TODO', 'TODO_NEW']
+    18. UPDATE_REMINDER_DATE_TIME: ['AMOUNT', 'ATTENDEE', 'DATE_TIME', 'DATE_TIME_NEW', 'ORDINAL', 'PERSON_REMINDED', 'PERSON_REMINDED_ADDED', 'RECURRING_DATE_TIME', 'RECURRING_DATE_TIME_NEW', 'TODO']
+    19. UPDATE_REMINDER_TODO: ['AMOUNT', 'ATTENDEE', 'DATE_TIME', 'PERSON_REMINDED', 'RECURRING_DATE_TIME', 'RECURRING_DATE_TIME_NEW', 'TODO', 'TODO_NEW']
+```
+
+#### Domain: TIMER
+
+```
+Domain: TIMER
+
+Intents (11): ['ADD_TIME_TIMER', 'CREATE_TIMER', 'DELETE_TIMER', 'GET_TIME', 'GET_TIMER', 'PAUSE_TIMER', 'RESTART_TIMER', 'RESUME_TIMER', 'SUBTRACT_TIME_TIMER', 'UNSUPPORTED_TIMER', 'UPDATE_TIMER']
+Slots   (5): ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+
+Slots by intent:
+    1. ADD_TIME_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    2. CREATE_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    3. DELETE_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    4. GET_TIME: ['DATE_TIME']
+    5. GET_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    6. PAUSE_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    7. RESTART_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    8. RESUME_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    9. SUBTRACT_TIME_TIMER: ['DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    10. UNSUPPORTED_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+    11. UPDATE_TIMER: ['AMOUNT', 'DATE_TIME', 'METHOD_TIMER', 'ORDINAL', 'TIMER_NAME']
+```
+
+#### Domain: WEATHER
+
+```
+Domain: WEATHER
+
+Intents (7): ['GET_CONTACT', 'GET_INFO_CONTACT', 'GET_LOCATION', 'GET_SUNRISE', 'GET_SUNSET', 'GET_WEATHER', 'UNSUPPORTED_WEATHER']
+Slots   (11): ['CONTACT', 'CONTACT_RELATED', 'DATE_TIME', 'LOCATION', 'LOCATION_MODIFIER', 'LOCATION_USER', 'MEASUREMENT_UNIT', 'SEARCH_RADIUS', 'TYPE_RELATION', 'WEATHER_ATTRIBUTE', 'WEATHER_TEMPERATURE_UNIT']
+
+Slots by intent:
+    1. GET_CONTACT: ['CONTACT_RELATED', 'TYPE_RELATION']
+    2. GET_INFO_CONTACT: ['CONTACT']
+    3. GET_LOCATION: ['LOCATION_MODIFIER', 'LOCATION_USER', 'SEARCH_RADIUS']
+    4. GET_SUNRISE: ['DATE_TIME', 'LOCATION']
+    5. GET_SUNSET: ['DATE_TIME', 'LOCATION']
+    6. GET_WEATHER: ['DATE_TIME', 'LOCATION', 'MEASUREMENT_UNIT', 'WEATHER_ATTRIBUTE', 'WEATHER_TEMPERATURE_UNIT']
+    7. UNSUPPORTED_WEATHER: ['DATE_TIME', 'LOCATION', 'WEATHER_ATTRIBUTE']
+```
+
+### Manifest parsing script
+
+```python
+import os
+import pandas as pd
+
+# Source manifest files
+manifest_path = "../datasets/stop/manifests"
+manifest_splits = ["eval.tsv", "test.tsv", "train.tsv"]
+
+# STOP dataset domains
+domains = ["alarm",
+           "event",
+           "messaging",
+           "music",
+           "navigation",
+           "reminder",
+           "timer",
+           "weather"]
+
+# Function definitions
+def parse_decoupled_normalized_seqlogical(input, results):
+    intents_slots_stack = []
+    intents_stack = []
+
+    if not isinstance(input, str):
+        return results
+
+    tokens = input.split()
+
+    for token in tokens:
+        if "[" in token:
+            intents_slots_stack.append(token)
+        if "[IN:" in token:
+            intent = token[4:]
+            intents_stack.append(intent)
+            if intent not in results["intents"]:
+                results["intents"].append(intent)
+                results["slots_by_intent"][intent] = set()
+        elif "[SL:" in token:
+            slot = token[4:]
+            if slot not in results["slots"]:
+                results["slots"].append(slot)
+            results["slots_by_intent"][intents_stack[-1]].add(slot)
+        elif "]" == token:
+            item = intents_slots_stack.pop()
+            if "[IN:" in item:
+                intents_stack.pop()
+
+    return results 
+
+def print_results_header():
+    print("\n-------------------------------------------\n")
+    print("STOP Dataset - Domains, Intents, and Slots")
+    print("\n-------------------------------------------\n")
+
+def print_results_summary(input):
+    print("DOMAIN       | IN | SL |")
+    print("------------------------")
+    for domain, results in input.items():
+        print(f"{domain.upper():12} | {len(results["intents"]):2} | {len(results["slots"]):2} |" )
+    print("------------------------")
+
+def print_results_details(input):
+    for domain, results in input.items():
+        print("\n---\n")
+        print(f"Domain: {domain.upper()}\n")
+        print(f"Intents ({len(results["intents"])}): {sorted(results["intents"])}")
+        print(f"Slots   ({len(results["slots"])}): {sorted(results["slots"])}\n")
+        print("Slots by intent:")
+
+        i = 1
+        sorted_keys = sorted(results["slots_by_intent"].keys())
+        for key in sorted_keys:
+            print(f"    {i}. {key}: {sorted(results["slots_by_intent"][key])}")
+            i += 1
+    print("\n---\n")
+
+# Process each domain separately to identify its intents and slots
+all_results = {}
+for domain in domains:
+    all_results[domain] = {"intents": [], "slots": [], "slots_by_intent": {}}
+
+for split in manifest_splits:
+    print(f"Processing '{split}'...")
+    df = pd.read_csv(os.path.join(manifest_path, split), sep="\t")
+
+    for domain in domains:
+        df_domain = df[df["domain"] == domain]
+        for row in df_domain["decoupled_normalized_seqlogical"]:
+            all_results[domain] = parse_decoupled_normalized_seqlogical(row, all_results[domain])
+
+# Print the results
+print_results_header()
+print_results_summary(all_results)
+print_results_details(all_results)
+
+```

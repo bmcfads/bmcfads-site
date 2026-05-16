@@ -1,0 +1,16 @@
+---
+title: "Deep learning frameworks (PyTorch vs. TensorFlow)"
+description: "If you're searching for an in depth comparison of PyTorch and TensorFlow, this is not the post for you... there are numerous articles out there though! This post covers my high-level take on the two frameworks."
+pubDate: 2024-04-02
+tags: ["Tech"]
+---
+
+As I dive into my machine learning research, I have to answer the classic question, "what deep learning framework should I use?" Below is  how I categorized the two options before reading about the current status of each framework.
+
+**TensorFlow:** the default choice, largely used in commercial / production environments, mature options for edge deployments
+
+**PyTorch:** the new kid on the block, largely used in the academic / research community, less support for edge deployments
+
+After spending some time with good ol' Google, I came to pretty much the same conclusion. So which one will I be using for my research? PyTorch. Why? Mainly because I'm doing academic research, a lot of the open-source toolkits I'm interested in are PyTorch based, I want to learn something new, and I'm curious about [ExecuTorch](https://github.com/pytorch/executorch) - PyTorch's new solution for running inference on edge devices.
+
+The pre-release of ExecuTorch only [came out in October](https://pytorch.org/blog/pytorch-edge/) of last year and it's not yet recommended for production. That's alright though, I'm not going to production.

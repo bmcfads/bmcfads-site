@@ -1,0 +1,74 @@
+---
+title: "Spoken language understanding models"
+description: "I'm diving into spoken language understanding models for my research. What the heck are those? Let's find out."
+pubDate: 2024-05-21
+tags: ["Research"]
+---
+
+In an [earlier post](/blog/defining-my-masters-research-topic), I mentioned that my machine learning research will be centred around spoken language understanding models. For that reason, I feel it is important to spend some time creating a post that gives an overview of these models.
+
+---
+
+**TL;DR:** Spoken language understanding models process human speech to extract meaning.
+
+---
+
+Spoken language understanding (SLU) is a subfield of natural language processing (NLP), the area of artificial intelligence that aims for computers to understand human language be it spoken or typed.
+
+The goal of SLU is to extract meaning (e.g. intents) from human speech as opposed to simply identify the words that were said. This is not to be confused with natural language understanding (NLU), which also focuses on extracting meaning. The two are closely related - in fact, as you'll see below, SLU can rely on NLU. There is however one main difference between the two: the input data type. SLU processes audio and NLU processes text.
+
+*Do we have enough acronyms for you yet? No? Don't worry, there are more to come!*
+
+## Categories of SLU models
+
+As I explore the SLU landscape, I'm beginning to create a mental map of how the different models relate to one another and am starting to categorize them. The sections that follow are a breakdown of some of these categories.
+
+### Conventional vs. end-to-end
+
+Conventional SLU models consist of a two part pipeline to convert audio to intents. First, a process under the umbrella of speech-to-text (STT) called automatic speech recognition (ASR) is used to translate the audio samples to text. Second, NLU is used to translate this transcribed text to intents. The ASR and NLU models are trained and optimized independently then later combined, which can lead to the propagation of errors between the two models during inferencing.
+
+To address the issue of cascading errors and other challenges with conventional models, around 2018 [researchers began to investigate](https://arxiv.org/abs/1802.08395) the feasibility of an end-to-end spoken language understanding (E2E SLU) model. Similar to conventional SLU models, these E2E SLU models can consist of two parts, an ASR module and an NLU model. The difference with end-to-end models is that the two parts are jointly optimized. Another variant, direct E2E SLU - a single, unified model that goes directly from audio to intents, skipping the text representation stage - [has also been introduced](https://arxiv.org/abs/1809.09190). 
+
+Although E2E SLU models have some additional benefits there are also new challenges introduced. Mainly, there are limited large datasets that map audio directly to intents that can be used for training the E2E SLU models from scratch. For my research, I'm concentrating on direct E2E SLU models.
+
+### Cloud based vs. on-device
+
+Conventional SLU models can be quite large and therefore require cloud infrastructure to run inferencing. Direct E2E SLU models have the potential to be smaller, less complex, and more efficient than conventional models. As such, they are better suited to being run on-device.
+
+In recent years, the generative AI boom has seen models grow larger and larger. Paradoxically, there has been a concurrent trend to make models smaller and smaller in order to push them to edge devices. Regarding E2E SLU models specifically, one of the grand challenges for the ICASSP 2023 conference was organized by Meta Research, targeted SLU models, and had [a specific challenge track for on-device](https://facebookresearch.github.io/spoken_task_oriented_parsing/docs/challenge_tracks#track-2-on-device), the goal of which was to build the highest quality model with a limit of 15 million parameters.  In my research, I'm seeing if I can go even smaller with E2E SLU models for on-device deployment.
+
+### Closed-source vs. open-source
+
+This one is straightforward. Can the model implementation source code be viewed or not. I'm going to open-source my work.
+
+### Machine learning framework
+
+Another straight forward category. I'm planning to use PyTorch, so I'm interested in knowing if the model is based on PyTorch or TensorFlow.
+
+## SLU models table
+
+Below is a non-exhaustive table summarizing some SLU models according to the categories listed above.
+
+| Model | Open-Source | Approach | Inference | Framework |
+| - | :-: | :-: | :-: | :-: |
+| [ESPnet: SLU](https://github.com/espnet/espnet/tree/master?tab=readme-ov-file#slu-spoken-language-understanding) | ✅ | e2e | edge | pytorch |
+| [SpeechBrain: SLURP Direct Recipe](https://github.com/speechbrain/speechbrain/tree/main/recipes/SLURP#direct-recipe) | ✅ | e2e | edge | pytorch |
+| [SpeechBrain: Timers and Such Direct Recipe](https://github.com/speechbrain/speechbrain/tree/develop/recipes/timers-and-such#direct-recipe) | ✅ | e2e | edge | pytorch |
+| [Fluent.ai Air](https://fluent.ai/products/air/)| ❌ | e2e | edge | n/a |
+|[NXP VIT S2I](https://www.nxp.com/design/design-center/software/embedded-software/voice-intelligent-technology-speech-to-intent-engine:VIT-SPEECH-TO-INTENT) | ❌ | e2e | edge | n/a |
+| [Picovoice Rhino](https://picovoice.ai/platform/rhino/) | ❌ | e2e | edge | n/a |
+| [Amazon Lex](https://aws.amazon.com/lex/) | ❌ | conventional | cloud | n/a |
+| [Google Dialogflow](https://cloud.google.com/dialogflow?hl=en) | ❌ |  conventional | cloud | n/a |
+| [Microsoft LUIS](https://www.luis.ai) | ❌ | conventional | cloud | n/a |
+
+---
+
+## Acronyms
+
+- ASR: Automatic Speech Recognition
+- E2E SLU: End-to-End Spoken Language Understanding
+- NLP: Natural Language Processing
+- NLU: Natural Language Understanding
+- SLU: Spoken Language Understanding
+- STT: Speech-to-Text
+- TTS: Text-to-Speech

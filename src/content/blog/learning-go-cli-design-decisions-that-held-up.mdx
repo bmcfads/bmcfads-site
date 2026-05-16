@@ -1,0 +1,151 @@
+---
+title: "Learning Go: CLI Design Decisions That Held Up"
+description: "I kept renaming video files by hand after every shoot. A Python script could have fixed it in an hour. Instead I built a proper CLI tool in Go, because the real goal was learning Go's patterns and tooling."
+pubDate: 2026-03-26
+tags: ["Tech"]
+featured: true
+---
+
+I shoot video footage across multiple cameras. Every shoot ends the same way, with a directory of camera-generated filenames that don't mean anything two weeks later.
+
+My fix was manual renaming, with the ongoing thought of "one day I'll write a Python script to do this." Yeah, yeah, there are tools out there that do this. I know. I wanted to write my own.
+
+So I built [mfren: a CLI tool for renaming media files](https://github.com/bmcfads/mfren). It's small, contained, and deliberately scoped. It's also my first real Go project, built as a foundation before tackling something more complex.
+
+## Why Go?
+
+Go keeps coming up in the AI tooling and infrastructure space, and the case for it in [agentic tooling specifically](https://getbruin.com/blog/go-is-the-best-language-for-agents/) is compelling. I wanted to get proper hands-on experience with the language, and learning it in isolation felt abstract. Building something real with a clear scope seemed like the right way in.
+
+`mfren` was a good fit for a first project: no external API dependencies, a clear input/output model, and a problem I actually had. The goal wasn't sophistication, it was getting comfortable with Go.
+
+## What it does
+
+`mfren` walks a directory and renames media files into this format:
+
+```
+<YYYY-MM-DD>-<camera-id>-<NNN>.<ext>
+```
+
+Something like `GS010004.360` becomes `2026-03-21-max2-c01-001.360`. It handles flat directories and subdirectory structures (one camera per subdirectory), supports overriding the date and camera ID, and has a flag to preview renames without committing them. The full README is on [GitHub](https://github.com/bmcfads/mfren).
+
+## The design decisions
+
+Before writing the code, I spent time thinking through how the tool should behave and where it could go wrong. I'm not someone who goes straight to building; I plan and map things out first as I like to be structured and organized. The decisions below reflect that.
+
+### The name
+
+The obvious name was `mfrn`. Short, typeable, and represents what it does. But `mfrn` already existed as an obscure command I came across in the wild, and it conflicted with existing entries in the Go package registry. So, `mfren` it is. One extra letter, fully unique on the registry, and it still expands cleanly to the full tool name, Media File Renamer.
+
+### User confirmation
+
+Before renaming anything, `mfren` shows a prompt and requires explicit user confirmation:
+
+```
+Directory: /Users/you/shoots/cool-shoot/media
+Warning: renaming files is destructive and cannot be undone.
+Proceed? [y/N]:
+```
+
+Renaming files is irreversible. The prompt exists to reduce "oh shit!" moments. A last chance to make sure you're in the right directory, renaming the right files. This will also come in handy down the road when [agents are interacting with the CLI](#whats-next-making-it-agent-friendly) as a checkpoint to ask the (human) user for confirmation.
+
+The `--dry-run` flag skips this entirely. It's non-destructive by definition, so asking for confirmation before a preview would be pointless friction.
+
+### Explicit directory argument, always
+
+`mfren` requires a directory argument. It will never default to the current directory.
+
+```
+mfren ./media        # correct
+mfren                # error: accepts 1 arg(s), received 0
+```
+
+This is deliberate. As above in the user confirmation, requiring an explicit target reduces the chance of accidentally running the tool in the wrong place. The extra two characters of `mfren .` are worth the safety guarantee.
+
+### No news is good news
+
+By default, `mfren` is silent on success. No output means everything worked. Errors go to stderr with a non-zero exit code.
+
+This follows Unix philosophy (but more importantly I just don't like a noisy terminal). Verbose mode is opt-in via `--verbose` for when you want to watch the renames happen.
+
+### Why Cobra over the standard `flag` package
+
+Go ships with a built-in `flag` package. It works, but shorthand flags like `-c` for `--camera` display as two separate entries in help output, and the formatting is basic.
+
+[Cobra](https://github.com/spf13/cobra) seems to be the de facto standard for Go CLIs. It handles shorthand flags cleanly, generates good help output, and makes adding subcommands later straightforward. The decision was simple: learn the tool the industry uses.
+
+### Separate the rename logic from CLI wiring
+
+The rename logic lives in `internal/renamer/` rather than directly in `cmd/root.go`. In Go, the `internal/` directory restricts a package to the project; it can't be imported externally.
+
+This keeps `cmd/root.go` thin. It handles CLI wiring and flag validation, then delegates to `renamer.Rename()`. The rename logic is testable in isolation without going through the Cobra command layer. It also makes the boundary explicit, `renamer` is an implementation detail, not a public API.
+
+This means the `renamer` package knows nothing about Cobra or flags. It receives plain values. It could be called from a different interface, such as an MCP tool, without any changes to the renamer itself.
+
+### Camera ID is a free-form string
+
+The `--camera` flag accepts any string, e.g. `sony`, `max2-c01`, `hb12-c02`. `mfren` doesn't validate or parse it (#whats-next-making-it-agent-friendly), simply uses it as-is in the filename.
+
+This keeps the tool flexible for any workflow. Some videographers use simple names, others use structured identifiers that encode both the model and camera number. `mfren` doesn't need to understand the convention, just preserve it.
+
+### The `--camera` flag conflict
+
+When subdirectories are present, `mfren` uses each subdirectory name as the camera ID automatically. If you also pass `--camera`, it exits with an error rather than applying that ID to all subdirectories.
+
+The reasoning: this was my workflow and I wrote this tool for myself 😆. If I have subdirectories, they are already named with the camera ID. Silently overriding all of them with a single camera ID would produce the wrong output.
+
+If someone does want to use a specific camera ID per subdirectory, they can simply run `mfren` multiple times, once per subdirectory.
+
+The assumption: if you have subdirectories, they represent your cameras (again, my workflow). Loose files at the top level are likely metadata, notes, or other non-media files you wouldn't want renamed.
+
+### One level of subdirectories only
+
+`mfren` walks one level of subdirectories and stops. It does not recurse deeper.
+
+This is a deliberate safety decision. Recursing deeper risks renaming files in unexpected locations if the directory structure is more complex than anticipated. A future `--recursive` flag can opt into deeper walking for users who need it.
+
+### File counter resets per subdirectory
+
+When processing subdirectories, the file counter (`001`, `002`, `003`...) resets to `001` for each subdirectory rather than incrementing across all directories.
+
+Each subdirectory is expected to represent a different camera (you guessed it, my workflow!). The counter is a sequence number within a camera's footage, not a global sequence across the entire shoot. Resetting per directory keeps the naming semantically correct.
+
+### Case-insensitive extension matching
+
+Supported media extensions are matched, case-insensitively. Only media files are renamed. This is a media file renaming tool after all.
+
+Cameras are inconsistent. Requiring exact case matching would silently skip files, which is worse than being permissive. `.MP4`, `.mp4`, and `.Mp4` are all treated the same.
+
+### Release with GoReleaser
+
+[GoReleaser](https://github.com/goreleaser/goreleaser) handles cross-platform builds and releases. One command builds binaries for macOS ARM64 and AMD64, Linux AMD64 and ARM64, and Windows AMD64, attaches them to the GitHub release, and generates a changelog. Users without Go installed can download a pre-built binary directly.
+
+It's the Go standard for releasing software, and it saves a lot of time.
+
+## Go in practice
+
+Some thoughts around my first experience with Go:
+
+- The tooling around go (`go mod init`, `go get`, `go build`, `go test`, etc.) was really nice. Things just worked the way you'd expect them to. 
+- Go also seems to manage dependency hell well. Coming from ecosystems where dependency management is a recurring source of pain, Go was a relief.
+- Publishing to the Go package registry was surprisingly straightforward too. Tag a release, and it's listed. No approval process, no package manifest to wrestle with.
+- The speed of execution is also noticeable. For a CLI tool where you're running the binary repeatedly, it matters.
+
+Mostly though, I never felt frustrated by Go. That's rarer than it should be.
+
+### What's next: making it agent-friendly
+
+The next iteration of `mfren` is about making it usable by AI agents, not just humans. This is a design dimension most CLI tools don't think about, but treating agents as first class users [increasingly matters](https://justin.poehnelt.com/posts/rewrite-your-cli-for-ai-agents/). Human DX and agent DX are different enough that a human-first CLI needs deliberate work to serve agents well.
+
+`mfren` already has some of the right instincts: `--dry-run` flag, silent by default, a confirmation prompt, basic flag validation. But there are gaps to close:
+
+- **Input hardening** — validate the inputs (date, camera ID) against injection patterns, reject control characters and path traversal attempts
+- **JSON inputs / outputs** — machine-readable input and output format so an agent can parse reliably
+- `**SKILL.md**` — explicit guidance for agents on how to use the tool, what to watch out for, what flags to always use
+
+## Wrapping up
+
+`mfren` is small. That was the point. A contained problem, a real workflow need, and enough surface area to learn how Go projects are actually structured. The package layout, the toolchain, CLI design patterns, Cobra, and GoReleaser for cross-platform builds.
+
+The design decisions that matter most aren't the clever ones. They're the boring ones: require explicit arguments for destructive operations, be silent on success, never silently ignore user intent, keep your command layer thin.
+
+The repo is at [github.com/bmcfads/mfren](https://github.com/bmcfads/mfren). Install it with `go install github.com/bmcfads/mfren@latest` if you have a similar problem.

@@ -1,0 +1,26 @@
+---
+title: "Access to GPUs"
+description: "The first question you should be asking yourself is whether or not you actually need a GPU for what you're trying to accomplish. Let's assume you do. Here are some options I considered."
+pubDate: 2024-04-05
+tags: [""]
+---
+
+Ultimately my need for a GPU or not will depend a lot on the size of my dataset. I can't say for certain at this point that I'll need one for my master's research because I don't yet have a dataset! However, it's most likely going to be the case since I want to train end-to-end spoken language understanding (E2E SLU) models from scratch. So I have started to consider some options for training models.
+
+**Options under consideration:**
+
+- Training locally with self-hosted Jupyter notebooks - I don't have a GPU so this will be slow (if my machine is even capable) and probably a little annoying to manage.
+- Google Colab - this seems like a reasonable way to go as the notebooks are easy to configure and share, it is used somewhat in research, there are lots of example notebooks out there, and there is free/paid access to GPUs. There's just something that feels a little cheesy to me about using Google Colab though 🤷‍♂️.
+- Another hosted notebook environment - I came across [Paperspace](https://www.paperspace.com/) and it intrigued me. It seems like a sexier version of Google Colab. They built their own IDE on top of JupyterLab, supposedly have zero configuration notebooks, and they have free/paid access to GPUs. That said, I do have some hesitations.
+- SageMaker - seems like overkill for my needs and anything I have done with AWS in the past has been a pain to configure.
+- Compute accessible through my university - I haven't evaluated this thoroughly because I am assuming it would be a pain (more to configure, more paperwork/bureaucracy, delays waiting on others).
+
+Generally I like to pick the tool that's the easiest to set up and use out of the ones that fit my needs. In this case, that's Google Colab. Even though I do have some concerns about Paperspace (GPU availability, ease of configuration, portability of notebooks), I can't seem to shake my interest in trying it. Also, a lot of the negative feedback I read was before they were acquired by Digital Ocean, so maybe things have changed.
+
+In the end I'm doing my best to not overthink it. I want to give Paperspace a go, so let's have a go. I can always fall back to Google Colab if needed.
+
+---
+
+EDIT:
+
+I gave Paperspace a try. Each time I logged in I had trouble with GPU availability, so I decided to bail. I did consider Colab again. Although you can set up persistent storage of data and environments using Google Drive, it's not really how Colab is designed to be used. In the end, I went through the hassle of setting up AWS and SageMaker. I started using SageMaker Studio to launch a JupyterLab space, which runs on an EC2 instance and uses an EBS volume for storage.

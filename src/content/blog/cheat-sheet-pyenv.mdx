@@ -1,0 +1,152 @@
+---
+title: "Cheat sheet: pyenv"
+description: "Here's a quick overview of using pyenv and pyenv-virtualenv."
+pubDate: 2024-04-29
+tags: ["Tech"]
+---
+
+I wrote this post as a reference for myself. Maybe you'll find it useful as well.
+
+## Project set up
+
+```
+pyenv install --list
+pyenv install 3.12.2
+
+pyenv virtualenv 3.12.2 my-awesome-project
+
+cd projects
+mkdir my-awesome-project
+cd my-awesome-project
+
+pyenv local my-awesome-project
+```
+
+## Project tear down
+
+```
+cd projects/my-awesome-project
+
+pyenv local --unset
+pyenv uninstall my-awesome-project
+
+cd ..
+rm -r my-awesome-project
+```
+
+## Commands
+
+The complete `pyenv` command reference list can be found [here](https://github.com/pyenv/pyenv/blob/master/COMMANDS.md).
+
+### pyenv
+
+List all available pyenv commands:
+
+```
+pyenv commands
+```
+
+List all available pyenv commands along with a brief description of what they do:
+
+```
+pyenv help
+```
+
+Display help for a specific command:
+
+```
+pyenv help <command>
+```
+
+```
+pyenv help install
+```
+
+List all available version of Python, including Anaconda, Jython, pypy, and stackless:
+
+```
+pyenv install --list
+```
+
+Install the latest version in a specific version line or a specific version:
+
+```
+pyenv install <version>
+```
+
+```
+pyenv install 3.12
+pyenv install 3.12.2
+```
+
+Uninstall the specific version (or env):
+
+```
+pyenv uninstall <version>
+```
+
+```
+pyenv uninstall 3.12.2
+pyenv uninstall my-env
+```
+
+Display the currently active Python version:
+
+```
+pyenv version
+```
+
+List all Python versions known to pyenv:
+
+```
+pyenv versions
+```
+
+Set the global version:
+
+```
+pyenv global <version>
+```
+
+```
+pyenv global 3.12.2
+```
+
+Set the version (or env) for the current directory:
+
+```
+pyenv local <version>
+```
+
+```
+pyenv local 3.12.2
+pyenv local my-env
+```
+
+Unset the version (or env) for the current directory:
+
+```
+pyenv local --unset
+```
+
+### pyenv-virtualenv
+
+Create a new virtual environment with a specific version of Python:
+
+```
+pyenv virtualenv <version> <environment>
+```
+
+```
+pyenv virtualenv 3.12.2 my-env
+```
+
+Create a virtual environment for the current pyenv Python version:
+
+```
+pyenv virtualenv <environment>
+```
+
+```
+pyenv virtualenv my-env
+```
