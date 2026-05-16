@@ -1,0 +1,35 @@
+# This workflow will:
+# - Build the Astro site
+# - Deploy to GitHub pages
+
+name: Site Deployment
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Build Astro site
+        uses: withastro/action@v6
+
+  deploy-site:
+    needs: build-site
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy site to GitHub pages
+        id: deployment
+        uses: actions/deploy-pages@v5
