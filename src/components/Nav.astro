@@ -1,13 +1,15 @@
 ---
 import NavLink from './NavLink.astro';
+import { NAV_LINKS } from '../consts';
 ---
 
 <nav class="nav">
-  <NavLink href="/blog">Blog</NavLink>
-  <span class="pipe">|</span>
-  <NavLink href="/portfolio">Portfolio</NavLink>
-  <span class="pipe">|</span>
-  <NavLink href="/about">About</NavLink>
+  {NAV_LINKS.map((link, i) => (
+    <>
+      <NavLink href={link.href}>{link.label}</NavLink>
+      {i < NAV_LINKS.length - 1 && <span class="pipe">|</span>}
+    </>
+  ))}
 </nav>
 
 <style>
