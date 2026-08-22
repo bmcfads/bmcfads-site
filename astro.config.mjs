@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://bmcfads.ca',
+  site: 'https://bmcfads.dev',
   integrations: [mdx(), sitemap()],
   markdown: {
     rehypePlugins: [
